@@ -11,11 +11,14 @@ import matplotlib.patches as patches
 fig, ax = plt.subplots(1)
 
 class ImgCanvas(object):
-    def __init__(self, imgorname):
-        if type(imgorname) is str:            
-            img = np.array(Image.open(imgorname), dtype = np.uint8)
+    def __init__(self, imgornameorsize):
+        if isinstance(imgornameorsize, str):            
+            img = np.array(Image.open(imgornameorsize), dtype = np.uint8)
+        elif isinstance(imgornameorsize, (list, tuple)):
+            w, h = imgornameorsize
+            img = np.ones((h, w, 3), dtype = np.uint8) * 255
         else:
-            img = imgorname
+            img = imgornameorsize
         plt.imshow(img)
 
     def Plot(self, *args, scalex=True, scaley=True, data=None, **kwargs):
@@ -28,7 +31,7 @@ class ImgCanvas(object):
         else:
             xs = [x]
             ys = [y]            
-        plt.plot(xs, ys, marker='.', markersize=size, color=color)
+        plt.scatter(xs, ys, marker='.', s = size, color=color)
         
     def Line(self, a, b, color = (1,0,0), linewidth=1):
         if isinstance(a[0], (list, tuple)):
@@ -65,9 +68,9 @@ class ImgCanvas(object):
 
 def Test():
     import sys 
-    c = ImgCanvas(sys.argv[1])
+    c = ImgCanvas([800, 800])
     c.Plot(np.arange(300), 30 + 10*np.sin(np.arange(300)), linewidth=1, color = (1,0,0,0.5))
-    c.Point(range(200), range(200))
+    c.Point(range(0, 200, 10), range(0, 200, 10))
     c.Line([(100, 100), (200, 100)], [(100, 200.4), (200, 300)])
     c.Line((200, 300), (210, 400))
     c.Circle((100, 100), 30, color = (1.0, 0, 0, 0.5))
