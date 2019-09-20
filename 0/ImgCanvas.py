@@ -1,10 +1,9 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# Copyright (c) RVBUST, Inc - All rights reserved.
 
-
+import sys 
 import numpy as np
-from PIL import Image 
+import cv2
 from matplotlib import pyplot as plt
 import matplotlib.patches as patches
 
@@ -13,7 +12,7 @@ fig, ax = plt.subplots(1)
 class ImgCanvas(object):
     def __init__(self, imgornameorsize):
         if isinstance(imgornameorsize, str):            
-            img = np.array(Image.open(imgornameorsize), dtype = np.uint8)
+            img = cv2.imread(imgornameorsize, 1)
         elif isinstance(imgornameorsize, (list, tuple)):
             w, h = imgornameorsize
             img = np.ones((h, w, 3), dtype = np.uint8) * 255
@@ -24,14 +23,14 @@ class ImgCanvas(object):
     def Plot(self, *args, scalex=True, scaley=True, data=None, **kwargs):
         plt.plot(*args, scalex=scalex, scaley=scaley, data=data, **kwargs)
         
-    def Point(self, x, y, size = 1, color = (1,0,0)): 
+    def Point(self, x, y, size = 1, color = (1,0,0), **kwargs): 
         if isinstance(x, (list, tuple, np.ndarray)):
             xs = x
             ys = y
         else:
             xs = [x]
             ys = [y]            
-        plt.scatter(xs, ys, marker='.', s = size, color=color)
+        plt.scatter(xs, ys, marker='.', s = size, color=color, **kwargs)
         
     def Line(self, a, b, color = (1,0,0), linewidth=1):
         if isinstance(a[0], (list, tuple)):
@@ -81,5 +80,7 @@ def Test():
     c.Show();
 
 if __name__ == '__main__':
-    Test()
+    # Test()
+    c = ImgCanvas(sys.argv[1])
+    c.Show()
     
