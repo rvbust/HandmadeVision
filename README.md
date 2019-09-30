@@ -2,7 +2,7 @@ Handmade Vision
 ---
 
 
-If you have any question or please start a thread in **issues** page. 
+If you have any question, feel free to ask in **issues** page. 
 
 
 
